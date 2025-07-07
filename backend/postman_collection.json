@@ -1,0 +1,512 @@
+{
+  "info": {
+    "name": "Storage Management System API",
+    "description": "Complete API collection for Storage Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"Test123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('auth_token', response.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Test123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('auth_token', response.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"test@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgot-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Folders",
+      "item": [
+        {
+          "name": "Get All Folders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/folders",
+              "host": ["{{base_url}}"],
+              "path": ["folders"]
+            }
+          }
+        },
+        {
+          "name": "Create Folder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Documents\",\n  \"description\": \"Personal documents folder\",\n  \"color\": \"#3B82F6\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/folders",
+              "host": ["{{base_url}}"],
+              "path": ["folders"]
+            }
+          }
+        },
+        {
+          "name": "Get Folder by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/folders/:id",
+              "host": ["{{base_url}}"],
+              "path": ["folders", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Update Folder",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Folder Name\",\n  \"isFavorite\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/folders/:id",
+              "host": ["{{base_url}}"],
+              "path": ["folders", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Delete Folder",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/folders/:id",
+              "host": ["{{base_url}}"],
+              "path": ["folders", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Duplicate Folder",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/folders/:id/duplicate",
+              "host": ["{{base_url}}"],
+              "path": ["folders", ":id", "duplicate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "item": [
+        {
+          "name": "Get All Files",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/files?limit=20&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["files"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Upload Files",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "description",
+                  "value": "Test file upload",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "test,document",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/files/upload",
+              "host": ["{{base_url}}"],
+              "path": ["files", "upload"]
+            }
+          }
+        },
+        {
+          "name": "Get File by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/files/:id",
+              "host": ["{{base_url}}"],
+              "path": ["files", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Update File",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated File Name\",\n  \"isFavorite\": true,\n  \"tags\": \"updated,important\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/files/:id",
+              "host": ["{{base_url}}"],
+              "path": ["files", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Delete File",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/files/:id",
+              "host": ["{{base_url}}"],
+              "path": ["files", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Download File",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/files/:id/download",
+              "host": ["{{base_url}}"],
+              "path": ["files", ":id", "download"]
+            }
+          }
+        },
+        {
+          "name": "Duplicate File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/files/:id/duplicate",
+              "host": ["{{base_url}}"],
+              "path": ["files", ":id", "duplicate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notes",
+      "item": [
+        {
+          "name": "Get All Notes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notes?limit=20&page=1",
+              "host": ["{{base_url}}"],
+              "path": ["notes"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My First Note\",\n  \"content\": \"This is the content of my first note. It can be quite long and detailed.\",\n  \"tags\": \"personal,important\",\n  \"color\": \"#FEF3C7\",\n  \"isPinned\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/notes",
+              "host": ["{{base_url}}"],
+              "path": ["notes"]
+            }
+          }
+        },
+        {
+          "name": "Get Note by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notes/:id",
+              "host": ["{{base_url}}"],
+              "path": ["notes", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Update Note",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Note Title\",\n  \"content\": \"Updated content for the note.\",\n  \"isFavorite\": true,\n  \"isPinned\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/notes/:id",
+              "host": ["{{base_url}}"],
+              "path": ["notes", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Delete Note",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notes/:id",
+              "host": ["{{base_url}}"],
+              "path": ["notes", ":id"]
+            }
+          }
+        },
+        {
+          "name": "Duplicate Note",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notes/:id/duplicate",
+              "host": ["{{base_url}}"],
+              "path": ["notes", ":id", "duplicate"]
+            }
+          }
+        },
+        {
+          "name": "Search Notes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notes/search/:query",
+              "host": ["{{base_url}}"],
+              "path": ["notes", "search", ":query"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Summary & Analytics",
+      "item": [
+        {
+          "name": "Get Storage Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/summary",
+              "host": ["{{base_url}}"],
+              "path": ["summary"]
+            }
+          }
+        },
+        {
+          "name": "Get Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/summary/analytics?period=30",
+              "host": ["{{base_url}}"],
+              "path": ["summary", "analytics"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "30"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
